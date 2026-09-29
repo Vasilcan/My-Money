@@ -1,18 +1,16 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useTransactionModal } from '../context/useTransactionModal';
 import { MonthSelector } from '../components/MonthSelector';
 import { BudgetModal } from '../components/BudgetModal';
 import { getCurrentMonthIso, getTodayIsoString, formatDateDisplay } from '../lib/date';
 import { getTransactionsFiltered, getAllBudgets, getCategories } from '../lib/repository';
-import { totalByType, totalByCategory, balance } from '../lib/aggregations';
+import { totalByType, totalByCategory } from '../lib/aggregations';
 import { calculateDailyAverageMinor, getCategoryBudgetProgress } from '../lib/budget';
 import { formatMoney, formatMoneyWithSign } from '../lib/money';
-import type { Category, Budget, Transaction } from '../lib/models';
+import type { Category, Budget } from '../lib/models';
 
 export default function HomePage() {
-  const { openAddModal } = useTransactionModal();
   const [currentMonth, setCurrentMonth] = useState(getCurrentMonthIso());
   const [selectedCategoryForBudget, setSelectedCategoryForBudget] = useState<Category | null>(null);
   
@@ -99,38 +97,38 @@ export default function HomePage() {
     <div className="p-4 sm:p-6 space-y-6 pb-24">
       <header className="flex justify-between items-center mt-2">
         <div>
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Salut! 👋</h1>
-          <p className="text-gray-500 mt-1 font-medium">Urmărește-ți cheltuielile.</p>
+          <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">Salut! 👋</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1 font-medium">Urmărește-ți cheltuielile.</p>
         </div>
       </header>
 
       <MonthSelector currentMonth={currentMonth} onChange={setCurrentMonth} />
 
       {/* Summary Card */}
-      <section className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 space-y-6">
+      <section className="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-6">
         <div>
-          <p className="text-gray-500 text-sm font-bold uppercase tracking-wider mb-1">Sold disponibil</p>
-          <h2 className="text-4xl font-extrabold text-gray-900">{formatMoney(summary.totalBalance)}</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-wider mb-1">Sold disponibil</p>
+          <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white">{formatMoney(summary.totalBalance)}</h2>
         </div>
         
         <div className="flex gap-4">
-          <div className="flex-1 bg-gray-50 p-4 rounded-2xl">
-            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
+          <div className="flex-1 bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl">
+            <p className="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3 text-emerald-500">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 4.5l-15 15m0 0h11.25m-11.25 0V8.25" />
               </svg>
               Venituri
             </p>
-            <p className="text-lg font-bold text-gray-900">{formatMoney(summary.income)}</p>
+            <p className="text-lg font-bold text-gray-900 dark:text-white">{formatMoney(summary.income)}</p>
           </div>
-          <div className="flex-1 bg-gray-50 p-4 rounded-2xl">
-            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
+          <div className="flex-1 bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl">
+            <p className="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3 text-red-500">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 4.5l15 15m0 0V8.25m0 11.25H8.25" />
               </svg>
               Cheltuieli
             </p>
-            <p className="text-lg font-bold text-gray-900">{formatMoney(summary.expense)}</p>
+            <p className="text-lg font-bold text-gray-900 dark:text-white">{formatMoney(summary.expense)}</p>
           </div>
         </div>
       </section>
@@ -154,12 +152,12 @@ export default function HomePage() {
       {/* Budgets List */}
       <section className="space-y-4">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-bold text-gray-900">Bugete</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Bugete</h2>
         </div>
         
         {budgetStats.length === 0 ? (
-          <div className="bg-white p-6 rounded-3xl border border-gray-100 text-center">
-            <p className="text-gray-500 text-sm font-medium mb-4">Nu ai niciun buget setat încă.</p>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 text-center">
+            <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-4">Nu ai niciun buget setat încă.</p>
             <button
               onClick={() => {
                 const expenseCats = categories?.filter(c => c.type === 'expense') || [];
@@ -173,21 +171,21 @@ export default function HomePage() {
             </button>
           </div>
         ) : (
-          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden divide-y divide-gray-100">
             {budgetStats.map(stat => (
               <div 
                 key={stat.category.id} 
-                className="p-4 hover:bg-gray-50 cursor-pointer transition-colors"
+                className="p-4 hover:bg-gray-50 dark:bg-gray-900 cursor-pointer transition-colors"
                 onClick={() => setSelectedCategoryForBudget(stat.category)}
               >
                 <div className="flex justify-between items-center mb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{stat.category.icon}</span>
-                    <span className="font-bold text-gray-900">{stat.category.name}</span>
+                    <span className="font-bold text-gray-900 dark:text-white">{stat.category.name}</span>
                   </div>
                   <div className="text-right">
-                    <span className="font-bold text-gray-900">{formatMoney(stat.spentMinor)}</span>
-                    <span className="text-xs text-gray-500 font-medium ml-1">
+                    <span className="font-bold text-gray-900 dark:text-white">{formatMoney(stat.spentMinor)}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 font-medium ml-1">
                       / {stat.budgetMinor > 0 ? formatMoney(stat.budgetMinor) : 'Niciun buget'}
                     </span>
                   </div>
@@ -195,7 +193,7 @@ export default function HomePage() {
                 
                 {stat.budgetMinor > 0 && (
                   <>
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden mt-3">
+                    <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden mt-3">
                       <div 
                         className={`h-full rounded-full ${
                           stat.progress.status === 'green' ? 'bg-emerald-500' : 
@@ -220,16 +218,16 @@ export default function HomePage() {
       {/* Recent Transactions */}
       <section className="space-y-4">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-bold text-gray-900">Ultimele 5 tranzacții</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Ultimele 5 tranzacții</h2>
           <Link to="/transactions" className="text-emerald-600 font-bold text-sm">Vezi toate</Link>
         </div>
         
         {recentTransactions.length === 0 ? (
-          <div className="bg-white p-6 rounded-3xl border border-gray-100 text-center text-gray-500 text-sm font-medium">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 text-center text-gray-500 dark:text-gray-400 text-sm font-medium">
             Nicio tranzacție luna aceasta.
           </div>
         ) : (
-          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden divide-y divide-gray-100">
             {recentTransactions.map(tx => {
               const category = categories?.find(c => c.id === tx.categoryId);
               if (!category) return null;
@@ -241,13 +239,13 @@ export default function HomePage() {
                       {category.icon}
                     </div>
                     <div>
-                      <p className="font-bold text-gray-900">{category.name}</p>
-                      <p className="text-xs text-gray-500 font-medium">
+                      <p className="font-bold text-gray-900 dark:text-white">{category.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                         {formatDateDisplay(tx.date)} {tx.note && `• ${tx.note}`}
                       </p>
                     </div>
                   </div>
-                  <span className={`font-extrabold ${tx.type === 'income' ? 'text-emerald-600' : 'text-gray-900'}`}>
+                  <span className={`font-extrabold ${tx.type === 'income' ? 'text-emerald-600' : 'text-gray-900 dark:text-white'}`}>
                     {formatMoneyWithSign(tx.amountMinor, tx.type)}
                   </span>
                 </div>

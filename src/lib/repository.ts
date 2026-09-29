@@ -89,6 +89,17 @@ export async function deleteTransaction(id: string): Promise<void> {
   await db.transactions.delete(id);
 }
 
+export async function getAllTransactions(): Promise<Transaction[]> {
+  return await db.transactions.toArray();
+}
+
+export async function getTransactionsByDateRange(startDate: string, endDate: string): Promise<Transaction[]> {
+  return await db.transactions
+    .where('date')
+    .between(startDate, endDate, true, true)
+    .toArray();
+}
+
 export async function getTransactionsByMonth(year: number, month: number): Promise<Transaction[]> {
   const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
   const nextMonth = month === 12 ? 1 : month + 1;

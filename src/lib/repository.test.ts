@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from './db';
 import { 
   addTransaction, updateTransaction, deleteTransaction, 
-  getTransactionsByMonth, getTransactionsFiltered,
+  getTransactionsByMonth, getTransactionsFiltered, getAllTransactions, getTransactionsByDateRange,
   addCategory, updateCategory, deleteCategory, getCategories,
   archiveCategory, restoreCategory, getCategoryTransactionCount, deleteCategoryPermanently,
   setBudget, getBudget,
@@ -163,6 +163,30 @@ describe('Repository', () => {
 
       const filtered3 = await getTransactionsFiltered({ type: 'expense' });
       expect(filtered3).toHaveLength(3);
+    });
+
+    it('should get all transactions', async () => {
+      const categories = await getCategories(true);
+      const expenseCat = categories.find(c => c.type === 'expense')!;
+      
+      await addTransaction({ type: 'expense', amountMinor: 100, categoryId: expenseCat.id, date: '2023-01-01' });
+      await addTransaction({ type: 'expense', amountMinor: 200, categoryId: expenseCat.id, date: '2023-02-01' });
+      
+      const all = await getAllTransactions();
+      expect(all).toHaveLength(2);
+    });
+
+    it('should get transactions by date range', async () => {
+      const categories = await getCategories(true);
+      const expenseCat = categories.find(c => c.type === 'expense')!;
+      
+      await addTransaction({ type: 'expense', amountMinor: 100, categoryId: expenseCat.id, date: '2023-01-01' });
+      await addTransaction({ type: 'expense', amountMinor: 200, categoryId: expenseCat.id, date: '2023-01-15' });
+      await addTransaction({ type: 'expense', amountMinor: 300, categoryId: expenseCat.id, date: '2023-02-01' });
+      
+      const range = await getTransactionsByDateRange('2023-01-05', '2023-01-20');
+      expect(range).toHaveLength(1);
+      expect(range[0].amountMinor).toBe(200);
     });
   });
 

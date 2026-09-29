@@ -7,6 +7,9 @@ import {
   formatMonthDisplay,
   formatDateDisplay,
   formatDayHeader,
+  formatShortMonth,
+  getPastMonths,
+  getMonthDateRange,
 } from './date';
 
 describe('date utilities', () => {
@@ -53,5 +56,23 @@ describe('date utilities', () => {
     // 2026-03-25 was Wednesday (Miercuri)
     const header = formatDayHeader('2026-03-25', '2026-03-29');
     expect(header).toBe('Miercuri, 25 martie 2026');
+  });
+
+  it('should format short month in Romanian', () => {
+    expect(formatShortMonth('2026-01')).toBe('Ian');
+    expect(formatShortMonth('2026-03')).toBe('Mar');
+    expect(formatShortMonth('2026-12')).toBe('Dec');
+  });
+
+  it('should return past N months ending at given month', () => {
+    expect(getPastMonths('2026-03', 3)).toEqual(['2026-01', '2026-02', '2026-03']);
+    expect(getPastMonths('2026-02', 4)).toEqual(['2025-11', '2025-12', '2026-01', '2026-02']);
+    expect(getPastMonths('2026-03', 0)).toEqual([]);
+  });
+
+  it('should return start and end dates for a month', () => {
+    expect(getMonthDateRange('2026-03')).toEqual({ startDate: '2026-03-01', endDate: '2026-03-31' });
+    expect(getMonthDateRange('2026-02')).toEqual({ startDate: '2026-02-01', endDate: '2026-02-28' });
+    expect(getMonthDateRange('2024-02')).toEqual({ startDate: '2024-02-01', endDate: '2024-02-29' }); // leap year
   });
 });

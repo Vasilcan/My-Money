@@ -13,6 +13,21 @@ const RO_MONTHS = [
   'decembrie',
 ];
 
+const RO_SHORT_MONTHS = [
+  'Ian',
+  'Feb',
+  'Mar',
+  'Apr',
+  'Mai',
+  'Iun',
+  'Iul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Noi',
+  'Dec',
+];
+
 const RO_DAYS = [
   'Duminică',
   'Luni',
@@ -113,6 +128,46 @@ export function formatDateDisplay(dateIso: string): string {
   if (!monthName) return dateIso;
 
   return `${day} ${monthName} ${year}`;
+}
+
+/**
+ * Returns short Romanian month abbreviation (e.g. '2026-03' -> 'Mar').
+ */
+export function formatShortMonth(monthIso: string): string {
+  const parts = monthIso.split('-');
+  if (parts.length < 2) return monthIso;
+  const monthIndex = parseInt(parts[1], 10) - 1;
+  return RO_SHORT_MONTHS[monthIndex] || monthIso;
+}
+
+/**
+ * Returns a list of N consecutive months ending with endMonthIso (inclusive).
+ * Example: getPastMonths('2026-03', 3) -> ['2026-01', '2026-02', '2026-03']
+ */
+export function getPastMonths(endMonthIso: string, count: number): string[] {
+  if (count <= 0) return [];
+  const result: string[] = [];
+  let curr = endMonthIso;
+  for (let i = 0; i < count; i++) {
+    result.unshift(curr);
+    curr = getPreviousMonth(curr);
+  }
+  return result;
+}
+
+/**
+ * Returns the start and end dates (YYYY-MM-DD) for a given month (YYYY-MM).
+ * Example: getMonthDateRange('2026-02') -> { startDate: '2026-02-01', endDate: '2026-02-28' }
+ */
+export function getMonthDateRange(monthIso: string): { startDate: string; endDate: string } {
+  const [yearStr, monthStr] = monthIso.split('-');
+  const year = parseInt(yearStr, 10);
+  const month = parseInt(monthStr, 10);
+  const lastDay = new Date(year, month, 0).getDate();
+  return {
+    startDate: `${monthIso}-01`,
+    endDate: `${monthIso}-${String(lastDay).padStart(2, '0')}`,
+  };
 }
 
 /**

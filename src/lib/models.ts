@@ -31,4 +31,6 @@ export interface Settings {
   id: string;
   currency: string;
   firstDayOfMonth: number;
+  lastBackupDate?: string;
+  theme?: 'system' | 'light' | 'dark';
 }

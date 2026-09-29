@@ -148,22 +148,22 @@ function TransactionModalInner({
         onClick={onClose}
       >
         <div
-          className="w-full max-w-lg bg-white rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-200"
+          className="w-full max-w-lg bg-white dark:bg-gray-800 rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-200"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Mobile swipe indicator */}
           <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1 sm:hidden" />
 
           {/* Modal Header */}
-          <div className="flex items-center justify-between px-5 pt-3 pb-2 border-b border-gray-100">
-            <h2 id="modal-title" className="text-lg font-bold text-gray-900">
+          <div className="flex items-center justify-between px-5 pt-3 pb-2 border-b border-gray-100 dark:border-gray-700">
+            <h2 id="modal-title" className="text-lg font-bold text-gray-900 dark:text-white">
               {editingTransaction ? 'Editează tranzacția' : 'Tranzacție nouă'}
             </h2>
             <button
               type="button"
               onClick={onClose}
               aria-label="Închide"
-              className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
+              className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
             >
               ✕
             </button>
@@ -172,14 +172,14 @@ function TransactionModalInner({
           {/* Modal Body */}
           <form onSubmit={handleSubmit} className="overflow-y-auto px-5 py-4 space-y-4">
             {/* Type Switcher: Cheltuială / Venit */}
-            <div className="flex p-1 bg-gray-100 rounded-2xl">
+            <div className="flex p-1 bg-gray-100 dark:bg-gray-700 rounded-2xl">
               <button
                 type="button"
                 onClick={() => handleTypeChange('expense')}
                 className={`flex-1 min-h-[44px] py-2.5 text-sm font-semibold rounded-xl transition-all ${
                   type === 'expense'
                     ? 'bg-red-500 text-white shadow-md'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white'
                 }`}
               >
                 Cheltuială
@@ -190,7 +190,7 @@ function TransactionModalInner({
                 className={`flex-1 min-h-[44px] py-2.5 text-sm font-semibold rounded-xl transition-all ${
                   type === 'income'
                     ? 'bg-emerald-600 text-white shadow-md'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white'
                 }`}
               >
                 Venit
@@ -221,7 +221,7 @@ function TransactionModalInner({
                   className={`w-full min-h-[52px] text-2xl font-bold px-4 pr-16 rounded-2xl border transition-all outline-none ${
                     formTouched && !amountValidation.isValid
                       ? 'border-red-400 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-400'
-                      : 'border-gray-200 bg-gray-50/50 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+                      : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
                   }`}
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold text-lg pointer-events-none">
@@ -249,7 +249,7 @@ function TransactionModalInner({
               </div>
 
               {availableCategories.length === 0 ? (
-                <p className="text-sm text-gray-500 py-3 text-center">
+                <p className="text-sm text-gray-500 dark:text-gray-400 py-3 text-center">
                   Nu există categorii disponibile pentru acest tip.
                 </p>
               ) : (
@@ -268,7 +268,7 @@ function TransactionModalInner({
                         className={`flex flex-col items-center justify-center p-2 rounded-2xl min-h-[64px] transition-all border ${
                           isSelected
                             ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-semibold shadow-sm ring-2 ring-emerald-500/30'
-                            : 'border-gray-200 bg-white hover:bg-gray-50 text-gray-700'
+                            : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:bg-gray-900 text-gray-700'
                         }`}
                       >
                         <span className="text-2xl mb-1">{cat.icon}</span>
@@ -295,7 +295,7 @@ function TransactionModalInner({
                   <button
                     type="button"
                     onClick={() => setDate(getTodayIsoString())}
-                    className="text-xs font-medium px-2 py-0.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700"
+                    className="text-xs font-medium px-2 py-0.5 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 text-gray-700"
                   >
                     Azi
                   </button>
@@ -304,9 +304,11 @@ function TransactionModalInner({
               <input
                 id="transaction-date-input"
                 type="date"
+                min={`${new Date().getFullYear() - 10}-01-01`}
+                max={`${new Date().getFullYear() + 10}-12-31`}
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full min-h-[44px] px-3 py-2 rounded-xl border border-gray-200 bg-gray-50/50 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                className="w-full min-h-[44px] px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
               />
             </div>
 
@@ -325,7 +327,7 @@ function TransactionModalInner({
                 placeholder="Ex: Prânz la birou, benzină, etc."
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                className="w-full min-h-[44px] px-3 py-2 rounded-xl border border-gray-200 bg-gray-50/50 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                className="w-full min-h-[44px] px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
               />
             </div>
 
@@ -334,7 +336,7 @@ function TransactionModalInner({
               <button
                 type="submit"
                 disabled={!isFormValid || isSubmitting}
-                className="w-full min-h-[48px] py-3 px-4 rounded-2xl font-semibold text-white bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-all shadow-md active:scale-[0.99] flex items-center justify-center"
+                className="w-full min-h-[48px] py-3 px-4 rounded-2xl font-semibold text-white bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 disabled:text-gray-500 dark:text-gray-400 disabled:cursor-not-allowed transition-all shadow-md active:scale-[0.99] flex items-center justify-center"
               >
                 {isSubmitting
                   ? 'Se salvează...'

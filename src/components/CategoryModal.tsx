@@ -107,22 +107,22 @@ function CategoryModalInner({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg bg-white rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-200"
+        className="w-full max-w-lg bg-white dark:bg-gray-800 rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Mobile handle indicator */}
         <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1 sm:hidden" />
 
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-5 pt-3 pb-2 border-b border-gray-100">
-          <h2 id="category-modal-title" className="text-lg font-bold text-gray-900">
+        <div className="flex items-center justify-between px-5 pt-3 pb-2 border-b border-gray-100 dark:border-gray-700">
+          <h2 id="category-modal-title" className="text-lg font-bold text-gray-900 dark:text-white">
             {editingCategory ? 'Editează categoria' : 'Categorie nouă'}
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Închide"
-            className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
+            className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
           >
             ✕
           </button>
@@ -132,14 +132,14 @@ function CategoryModalInner({
         <form onSubmit={handleSubmit} className="overflow-y-auto px-5 py-4 space-y-4">
           {/* Type Switcher */}
           {!editingCategory ? (
-            <div className="flex p-1 bg-gray-100 rounded-2xl">
+            <div className="flex p-1 bg-gray-100 dark:bg-gray-700 rounded-2xl">
               <button
                 type="button"
                 onClick={() => setType('expense')}
                 className={`flex-1 min-h-[44px] py-2.5 text-sm font-semibold rounded-xl transition-all ${
                   type === 'expense'
                     ? 'bg-red-500 text-white shadow-md'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white'
                 }`}
               >
                 Cheltuială
@@ -150,14 +150,14 @@ function CategoryModalInner({
                 className={`flex-1 min-h-[44px] py-2.5 text-sm font-semibold rounded-xl transition-all ${
                   type === 'income'
                     ? 'bg-emerald-600 text-white shadow-md'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white'
                 }`}
               >
                 Venit
               </button>
             </div>
           ) : (
-            <div className="px-3 py-2 bg-gray-50 rounded-xl text-xs font-medium text-gray-500 flex items-center gap-2">
+            <div className="px-3 py-2 bg-gray-50 dark:bg-gray-900 rounded-xl text-xs font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2">
               <span>Tip categorie:</span>
               <span
                 className={`font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
@@ -194,7 +194,7 @@ function CategoryModalInner({
               className={`w-full min-h-[48px] px-4 rounded-xl border text-base font-medium outline-none transition-all ${
                 formTouched && !validation.isValid
                   ? 'border-red-400 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-400'
-                  : 'border-gray-200 bg-gray-50/50 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+                  : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
               }`}
             />
             {formTouched && !validation.isValid && (
@@ -209,7 +209,7 @@ function CategoryModalInner({
             </label>
             <div className="flex items-center gap-3 mb-2">
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-gray-100 shrink-0 transition-transform active:scale-95"
+                className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-gray-100 dark:border-gray-700 shrink-0 transition-transform active:scale-95"
                 style={{ backgroundColor: `${color}20` }}
               >
                 {icon || '❓'}
@@ -220,13 +220,13 @@ function CategoryModalInner({
                 onChange={(e) => setIcon(e.target.value)}
                 maxLength={4}
                 placeholder="Introdu emoji"
-                className="flex-1 min-h-[44px] px-3 py-2 rounded-xl border border-gray-200 bg-gray-50/50 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                className="flex-1 min-h-[44px] px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
               />
             </div>
 
             {/* Suggested Emojis */}
-            <div className="p-2 bg-gray-50 rounded-2xl border border-gray-100">
-              <span className="block text-[11px] font-semibold text-gray-500 mb-1.5 px-1">
+            <div className="p-2 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700">
+              <span className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5 px-1">
                 Sugestii populare:
               </span>
               <div className="grid grid-cols-8 gap-1">
@@ -235,9 +235,9 @@ function CategoryModalInner({
                     key={emojiOption}
                     type="button"
                     onClick={() => setIcon(emojiOption)}
-                    className={`min-h-[44px] flex items-center justify-center rounded-xl text-xl hover:bg-white transition-transform active:scale-90 ${
+                    className={`min-h-[44px] flex items-center justify-center rounded-xl text-xl hover:bg-white dark:bg-gray-800 transition-transform active:scale-90 ${
                       icon === emojiOption
-                        ? 'bg-white shadow-sm ring-2 ring-emerald-500/40'
+                        ? 'bg-white dark:bg-gray-800 shadow-sm ring-2 ring-emerald-500/40'
                         : ''
                     }`}
                   >
@@ -267,7 +267,7 @@ function CategoryModalInner({
                     style={{ backgroundColor: paletteColor }}
                   >
                     {isSelected && (
-                      <span className="w-5 h-5 rounded-full bg-white shadow-sm flex items-center justify-center text-xs text-gray-900 font-bold">
+                      <span className="w-5 h-5 rounded-full bg-white dark:bg-gray-800 shadow-sm flex items-center justify-center text-xs text-gray-900 dark:text-white font-bold">
                         ✓
                       </span>
                     )}
@@ -282,7 +282,7 @@ function CategoryModalInner({
             <button
               type="submit"
               disabled={!isFormValid || isSubmitting}
-              className="w-full min-h-[48px] py-3 px-4 rounded-2xl font-semibold text-white bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-all shadow-md active:scale-[0.99] flex items-center justify-center"
+              className="w-full min-h-[48px] py-3 px-4 rounded-2xl font-semibold text-white bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 disabled:text-gray-500 dark:text-gray-400 disabled:cursor-not-allowed transition-all shadow-md active:scale-[0.99] flex items-center justify-center"
             >
               {isSubmitting
                 ? 'Se salvează...'
